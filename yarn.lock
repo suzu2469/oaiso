@@ -629,6 +629,34 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@planetscale/database@npm:^1.5.0":
+  version: 1.5.0
+  resolution: "@planetscale/database@npm:1.5.0"
+  checksum: 02e9478360b4a4eca6657897f1d2f6c685e62b6afc191bf2cbc0fc0f548815593f745cc14bc8e68505b94627170ea8c654690d2f58fb9dc42e86cd0106da3636
+  languageName: node
+  linkType: hard
+
+"@prisma/client@npm:4.10.1":
+  version: 4.10.1
+  resolution: "@prisma/client@npm:4.10.1"
+  dependencies:
+    "@prisma/engines-version": 4.10.1-2.aead147aa326ccb985dcfed5b065b4fdabd44b19
+  peerDependencies:
+    prisma: "*"
+  peerDependenciesMeta:
+    prisma:
+      optional: true
+  checksum: f335dfc7dc5017d6f0f4171f3727ef2d3297495640f5063528e3643c2959c492a640a452880e04691674a7f258a8c552c7de45fb4c86270055d363e0fce18a6d
+  languageName: node
+  linkType: hard
+
+"@prisma/engines-version@npm:4.10.1-2.aead147aa326ccb985dcfed5b065b4fdabd44b19":
+  version: 4.10.1-2.aead147aa326ccb985dcfed5b065b4fdabd44b19
+  resolution: "@prisma/engines-version@npm:4.10.1-2.aead147aa326ccb985dcfed5b065b4fdabd44b19"
+  checksum: 6433a58c3d1c6016af64771c9fc8798d0c82eee0a8abc3dd43dfc6b019d9686b428592093dd1dec892598e37bbb3a5946d9d1a6cdecf5487ba78b1906af417d4
+  languageName: node
+  linkType: hard
+
 "@prisma/engines@npm:4.10.1":
   version: 4.10.1
   resolution: "@prisma/engines@npm:4.10.1"
@@ -2471,6 +2499,8 @@ __metadata:
   resolution: "root-workspace-0b6124@workspace:."
   dependencies:
     "@cloudflare/workers-types": ^4.20230115.0
+    "@planetscale/database": ^1.5.0
+    "@prisma/client": 4.10.1
     discord-interactions: ^3.3.0
     discord.js: ^14.7.1
     itty-router: ^3.0.11

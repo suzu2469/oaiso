@@ -6,6 +6,7 @@ import type {
     APIInteractionResponsePong,
     APIApplicationCommandInteractionDataOption,
     APIInteractionResponseChannelMessageWithSource,
+    Client,
 } from 'discord.js'
 import type { Env } from '.'
 import { JsonResponse } from './infrastructure/httputils/response'
@@ -14,13 +15,20 @@ import {
     ReminderDatetimeOptionType,
     ReminderMessageOptionType,
 } from './domain/entity/reminder'
+import { ReminderPlanetscale } from './infrastructure/interface/reminderPlanetscale'
+import { connect, Connection } from '@planetscale/database'
 
 export class App {
     private commandUsecase: ICommandUsecase
+    private planetscale: Connection
 
     constructor(private env: Env) {
+        this.planetscale = connect({
+            // url: env.
+        })
         this.commandUsecase = new CommandUsecase(
             new DiscordClient(this.env.DISCORD_TOKEN),
+            new ReminderPlanetscale(this.planetscale),
         )
     }
 
