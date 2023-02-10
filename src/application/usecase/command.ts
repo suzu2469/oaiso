@@ -12,6 +12,6 @@ export class CommandUsecase implements ICommandUsecase {
     }
 
     async registerReminder(args: RegisterReminderArgs): Promise<void> {
-        console.log('request coming: ', args)
+        console.log('request coming: ', JSON.stringify(args))
     }
 }
