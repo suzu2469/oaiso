@@ -17,6 +17,7 @@ import {
 } from './domain/entity/reminder'
 import { ReminderPlanetscale } from './infrastructure/interface/reminderPlanetscale'
 import { connect, Connection } from '@planetscale/database'
+import { InvalidArgsError } from './domain/entity/error'
 
 export class App {
     private commandUsecase: ICommandUsecase
@@ -80,6 +81,7 @@ export class App {
                                 },
                                 { status: 400 },
                             )
+
                         try {
                             await this.commandUsecase.registerReminder({
                                 channelId: message.channel_id,
@@ -87,8 +89,15 @@ export class App {
                                 memberId: message.member?.user.id ?? '',
                                 datetime: option.datetime,
                                 message: option.message,
+                                locale: message.locale,
                             })
                         } catch (e) {
+                            if (e instanceof InvalidArgsError) {
+                                return new JsonResponse(
+                                    { message: 'invalid args' },
+                                    { status: 400 },
+                                )
+                            }
                             return new JsonResponse(
                                 { message: 'Internal server error' },
                                 { status: 500 },
