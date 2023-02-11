@@ -6,7 +6,6 @@ import type {
     APIInteractionResponsePong,
     APIApplicationCommandInteractionDataOption,
     APIInteractionResponseChannelMessageWithSource,
-    Client,
 } from 'discord.js'
 import type { Env } from '.'
 import { JsonResponse } from './infrastructure/httputils/response'
@@ -25,7 +24,9 @@ export class App {
 
     constructor(private env: Env) {
         this.planetscale = connect({
-            // url: env.
+            host: env.DATABASE_HOST,
+            username: env.DATABASE_USERNAME,
+            password: env.DATABASE_PASSWORD,
         })
         this.commandUsecase = new CommandUsecase(
             new DiscordClient(this.env.DISCORD_TOKEN),
@@ -93,11 +94,14 @@ export class App {
                             })
                         } catch (e) {
                             if (e instanceof InvalidArgsError) {
-                                return new JsonResponse(
-                                    { message: 'invalid args' },
-                                    { status: 400 },
-                                )
+                                return new JsonResponse({
+                                    type: 4,
+                                    data: {
+                                        content: `値が不正です ${e.message}`,
+                                    },
+                                } as APIInteractionResponseChannelMessageWithSource)
                             }
+                            console.error(e)
                             return new JsonResponse(
                                 { message: 'Internal server error' },
                                 { status: 500 },
@@ -106,7 +110,7 @@ export class App {
                         return new JsonResponse({
                             type: 4,
                             data: {
-                                content: `I'll remind you at \`${option.datetime}\``,
+                                content: `${option.datetime} にリマインドします`,
                             },
                         } as APIInteractionResponseChannelMessageWithSource)
                     default:

@@ -6,6 +6,9 @@ export interface Env {
     DISCORD_TOKEN: string
     DISCORD_APP_ID: string
     DISCORD_PUBLIC_KEY: string
+    DATABASE_HOST: string
+    DATABASE_USERNAME: string
+    DATABASE_PASSWORD: string
 }
 
 const requireAuth = (env: Env, wReq: Request) => async (_: IRequest) => {
@@ -37,10 +40,10 @@ export default {
         router.get('/register-command', async () => {
             return await app.registerCommands()
         })
-        router.post('/interactions', requireAuth(env, request), async (req) => {
+        router.post('/interactions', requireAuth(env, request), async () => {
             return await app.receiveInteractions(await request.json())
         })
 
-        return router.handle(request)
+        return router.handle(request).catch(console.error)
     },
 }

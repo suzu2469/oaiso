@@ -13,11 +13,11 @@ datasource db {
 
 model Reminder {
   id         Int      @id @default(autoincrement())
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt @default(now())
   message    String
-  memberId   String
-  channelId  String
-  guildId    String
-  remindDate DateTime
+  member_id   String
+  channel_id  String
+  guild_id    String
+  remind_date DateTime
 }

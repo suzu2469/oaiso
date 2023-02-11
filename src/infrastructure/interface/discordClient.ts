@@ -24,9 +24,10 @@ export class DiscordClient implements ChatClient {
                     name_localizations: {
                         ja: '時刻',
                     },
-                    description: 'YYYY-MM-DDThh:mm:ss exp. 2020-10-31T14:24:00',
+                    description:
+                        'Enter a discord timestamp exp. `<t:1676097834:f>` https://discord-date.shyked.fr/',
                     description_localizations: {
-                        ja: 'YYYY-MM-DDThh:mm:ss 例: 2020-10-31T14:24:00',
+                        ja: 'Discordタイムスタンプを入力してください 例: `<t:1676097834:f>` https://discord-date.shyked.fr/',
                     },
                     required: true,
                 },

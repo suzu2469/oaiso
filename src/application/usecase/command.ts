@@ -1,5 +1,4 @@
 import { InvalidArgsError } from '../../domain/entity/error'
-import { datetimeFromLocale } from '../../domain/entity/reminder'
 import { ChatClient } from '../../domain/interface/chatClient'
 import { ReminderRepository } from '../../domain/repository/reminderRepository'
 import {
@@ -7,6 +6,7 @@ import {
     RegisterReminderArgs,
     registerReminderArgsSchema,
 } from '../../domain/usecase/command'
+import { discordTimestampSchema } from '../../domain/entity/reminder'
 
 export class CommandUsecase implements ICommandUsecase {
     constructor(
@@ -19,21 +19,33 @@ export class CommandUsecase implements ICommandUsecase {
     }
 
     async registerReminder(args: RegisterReminderArgs): Promise<void> {
-        console.log(JSON.stringify(args))
         const argsResult = registerReminderArgsSchema.safeParse(args)
-        console.log(JSON.stringify(argsResult, null, 2))
+        const datetimeResult = discordTimestampSchema.safeParse(args.datetime)
         if (!argsResult.success) {
-            throw new InvalidArgsError(argsResult.error.message)
+            if (argsResult.error.isEmpty) {
+                throw new InvalidArgsError(argsResult.error.message)
+            }
+            const reason = argsResult.error.errors
+                .map((e) => e.message)
+                .join(', ')
+            throw new InvalidArgsError(reason)
+        }
+        if (!datetimeResult.success) {
+            if (datetimeResult.error.isEmpty) {
+                throw new InvalidArgsError(datetimeResult.error.message)
+            }
+            const reason = datetimeResult.error.errors
+                .map((e) => e.message)
+                .join(', ')
+            throw new InvalidArgsError(reason)
         }
 
-        const datetime = datetimeFromLocale(args.locale)(args.datetime)
-
-        this.reminder.create({
+        await this.reminder.create({
             channelId: args.channelId,
             guildId: args.guildId,
             memberId: args.memberId,
             message: args.message,
-            remindDate: datetime,
+            remindDate: datetimeResult.data,
         })
     }
 }
