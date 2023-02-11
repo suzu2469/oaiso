@@ -1,6 +1,7 @@
 import { App } from './app'
 import { type IRequest, Router } from 'itty-router'
 import { verifyKey } from 'discord-interactions'
+import { ScheduledController, EventContext } from '@cloudflare/workers-types'
 
 export interface Env {
     DISCORD_TOKEN: string
@@ -43,10 +44,15 @@ export default {
         router.post('/interactions', requireAuth(env, request), async () => {
             return await app.receiveInteractions(await request.json())
         })
-        router.post('/remind', async () => {
-            return await app.sendRemind()
-        })
 
         return router.handle(request).catch(console.error)
+    },
+    async scheduled(
+        event: ScheduledController,
+        env: Env,
+        ctx: EventContext<any, any, any>,
+    ): Promise<void> {
+        const app = new App(env)
+        ctx.waitUntil(app.sendRemind())
     },
 }

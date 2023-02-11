@@ -1,3 +1,6 @@
 name = "oaiso"
 main = "src/index.ts"
 compatibility_date = "2023-02-09"
+
+[triggers]
+crons = ['*/1 * * * *']
