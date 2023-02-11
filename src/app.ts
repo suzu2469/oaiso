@@ -17,9 +17,12 @@ import {
 import { ReminderPlanetscale } from './infrastructure/interface/reminderPlanetscale'
 import { connect, Connection } from '@planetscale/database'
 import { InvalidArgsError } from './domain/entity/error'
+import { IReminderUsecase } from './domain/usecase/reminder'
+import { ReminderUsecase } from './application/usecase/reminder'
 
 export class App {
     private commandUsecase: ICommandUsecase
+    private reminderUsecase: IReminderUsecase
     private planetscale: Connection
 
     constructor(private env: Env) {
@@ -28,9 +31,16 @@ export class App {
             username: env.DATABASE_USERNAME,
             password: env.DATABASE_PASSWORD,
         })
+
+        const discordClient = new DiscordClient(this.env.DISCORD_TOKEN)
+        const reminderPlanetscale = new ReminderPlanetscale(this.planetscale)
         this.commandUsecase = new CommandUsecase(
-            new DiscordClient(this.env.DISCORD_TOKEN),
-            new ReminderPlanetscale(this.planetscale),
+            discordClient,
+            reminderPlanetscale,
+        )
+        this.reminderUsecase = new ReminderUsecase(
+            reminderPlanetscale,
+            discordClient,
         )
     }
 
@@ -159,5 +169,16 @@ export class App {
             datetime: datetimeOption.value,
             message: messageOption.value,
         }
+    }
+
+    async sendRemind(): Promise<Response> {
+        try {
+            await this.reminderUsecase.sendRemind()
+        } catch (e) {
+            console.error(e)
+            return new Response('ng', { status: 500 })
+        }
+
+        return new Response('ok')
     }
 }

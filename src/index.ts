@@ -43,6 +43,9 @@ export default {
         router.post('/interactions', requireAuth(env, request), async () => {
             return await app.receiveInteractions(await request.json())
         })
+        router.post('/remind', async () => {
+            return await app.sendRemind()
+        })
 
         return router.handle(request).catch(console.error)
     },

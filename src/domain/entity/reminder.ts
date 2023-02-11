@@ -20,3 +20,12 @@ export const discordTimestampSchema = z
     .refine((d) => {
         return new Date().getTime() < d.getTime()
     }, '現在より未来の時刻を指定してください')
+
+export type Reminder = {
+    id: number
+    guildId: string
+    channelId: string
+    userId: string
+    message: string
+    dateTime: Date
+}

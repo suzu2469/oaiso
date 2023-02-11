@@ -4,9 +4,11 @@ import {
     ReminderDatetimeOptionType,
     ReminderMessageOptionType,
 } from '../../domain/entity/reminder'
-import { ChatClient } from '../../domain/interface/chatClient'
+import { ChatClient, SendRemindArgs } from '../../domain/interface/chatClient'
 
 export class DiscordClient implements ChatClient {
+    private DISCORD_API_URL = 'https://discord.com/api/v10'
+
     constructor(private token: string) {}
 
     async sendRegisterCommand(appId: string): Promise<void> {
@@ -44,7 +46,7 @@ export class DiscordClient implements ChatClient {
             ],
         }
         const res = await fetch(
-            `https://discord.com/api/v10/applications/${appId}/commands`,
+            `${this.DISCORD_API_URL}/applications/${appId}/commands`,
             {
                 headers: {
                     'Content-Type': 'application/json',
@@ -58,7 +60,7 @@ export class DiscordClient implements ChatClient {
             console.error(
                 JSON.stringify(
                     {
-                        message: `Request Failed: https://discord.com/api/v10/applications/${appId}/commands`,
+                        message: `Request Failed: ${this.DISCORD_API_URL}/applications/${appId}/commands`,
                         status: res.status,
                         body: await res.json(),
                     },
@@ -67,6 +69,28 @@ export class DiscordClient implements ChatClient {
                 ),
             )
             throw new Error('Failed to post commands into discord')
+        }
+    }
+
+    async sendRemind(args: SendRemindArgs): Promise<void> {
+        const body = {
+            content: args.message,
+            tts: false,
+        }
+
+        const res = await fetch(
+            `${this.DISCORD_API_URL}/channels/${args.channelId}/messages`,
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bot ${this.token}`,
+                },
+                method: 'POST',
+                body: JSON.stringify(body),
+            },
+        )
+        if (!res.ok) {
+            throw new Error('Failed to send message to discord')
         }
     }
 }
