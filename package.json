@@ -1,0 +1,8 @@
+{
+  "name": "oaiso",
+  "private": true,
+  "workspaces": [
+    "apps/*"
+  ],
+  "packageManager": "yarn@3.4.1"
+}
