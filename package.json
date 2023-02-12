@@ -4,5 +4,12 @@
   "workspaces": [
     "apps/*"
   ],
-  "packageManager": "yarn@3.4.1"
+  "packageManager": "yarn@3.4.1",
+  "devDependencies": {
+    "prettier": "^2.8.4"
+  },
+  "dependencies": {
+    "@prisma/client": "^4.10.1",
+    "prisma": "^4.10.1"
+  }
 }
