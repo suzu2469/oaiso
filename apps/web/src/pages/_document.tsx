@@ -1,3 +1,4 @@
+import { createGetInitialProps } from '@mantine/next'
 import { Html, Head, Main, NextScript } from 'next/document'
 
 const Document = () => {
@@ -13,3 +14,5 @@ const Document = () => {
 }
 
 export default Document
+
+export const getInitialProps = createGetInitialProps()

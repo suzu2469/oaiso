@@ -10,6 +10,11 @@
   },
   "dependencies": {
     "@auth0/nextjs-auth0": "^2.2.1",
+    "@emotion/react": "^11.10.5",
+    "@emotion/server": "^11.10.0",
+    "@mantine/core": "^5.10.3",
+    "@mantine/hooks": "^5.10.3",
+    "@mantine/next": "^5.10.3",
     "@next/font": "13.1.6",
     "@tanstack/react-query": "^4.24.4",
     "@trpc/client": "^10.11.0",

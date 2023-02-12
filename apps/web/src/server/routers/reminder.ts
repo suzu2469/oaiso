@@ -1,4 +1,5 @@
 import { TRPCError } from '@trpc/server'
+import { z } from 'zod'
 
 import { router, procedure } from '@/server/trpc'
 import { prisma } from '@/server/prisma'
@@ -39,4 +40,36 @@ export const reminderRouter = router({
 
         return items
     }),
+    remove: procedure
+        .input(z.object({ id: z.number().min(1) }))
+        .mutation(async ({ input }) => {
+            await prisma.reminder.delete({
+                where: {
+                    id: input.id,
+                },
+            })
+        }),
+    update: procedure
+        .input(
+            z.object({
+                id: z.number().min(1),
+                remindDate: z
+                    .date()
+                    .refine(
+                        (d) => d.getTime() >= new Date(Date.now()).getTime(),
+                    ),
+                message: z.string().max(1000),
+            }),
+        )
+        .mutation(async ({ input }) => {
+            await prisma.reminder.update({
+                data: {
+                    remind_date: input.remindDate,
+                    message: input.message,
+                },
+                where: {
+                    id: input.id,
+                },
+            })
+        }),
 })
