@@ -44,6 +44,7 @@ export default {
         router.post('/interactions', requireAuth(env, request), async () => {
             return await app.receiveInteractions(await request.json())
         })
+        router.all('*', () => new Response('Not Found', { status: 404 }))
 
         return router.handle(request).catch(console.error)
     },
