@@ -69,7 +69,12 @@ const AppNavbar = () => {
     const { classes, cx } = useStyles()
 
     return (
-        <Navbar height="calc(100vh - 60px)" width={{ md: 300 }} p="md">
+        <Navbar
+            height="calc(100vh - 60px)"
+            style={{ zIndex: 100 }}
+            width={{ md: 300 }}
+            p="md"
+        >
             <Navbar.Section grow>
                 {data.map((item, index) => (
                     <Link
